@@ -511,7 +511,7 @@ M.autopairs_insert = function(bufnr, char)
     return char
 end
 
-M.autopairs_cr = function(bufnr)
+M.autopairs_cr_wrapped = function(bufnr)
     if is_disable() then
         return utils.esc('<cr>')
     end
@@ -569,6 +569,10 @@ M.autopairs_cr = function(bufnr)
         end
     end
     return utils.esc('<cr>')
+end
+
+M.autopairs_cr = function (bufnr)
+	return utils.esc (M.autopairs_cr_wrapped (bufnr) .. "x<Backspace>")
 end
 
 --- add bracket pairs after quote (|"aaaaa" => (|"aaaaaa")
