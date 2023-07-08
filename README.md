@@ -8,6 +8,16 @@ Requires neovim 0.7
 
 Install the plugin with your preferred package manager:
 
+### [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+return {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    opts = {} -- this is equalent to setup({}) function
+}
+```
+
 ### [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
@@ -376,6 +386,7 @@ npairs.setup({
       end_key = '$',
       keys = 'qwertyuiopzxcvbnmasdfghjkl',
       check_comma = true,
+      manual_position = true,
       highlight = 'Search',
       highlight_grey='Comment'
     },
