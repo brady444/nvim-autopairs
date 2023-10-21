@@ -760,6 +760,54 @@ local data = {
         after      = [[{{("It doesn't name %s", ''), 'ErrorMsg''|' }},  ]],
         end_cursor = 41
     },
+    {
+        name   = "80 add normal quote with '",
+        key    = [["]],
+        before = [[aa| 'aa]],
+        after  = [[aa"|" 'aa]]
+    },
+    {
+        name     = "81 add closing single quote for python prefixed string",
+        filetype = "python",
+        key      = [[']],
+        before   = [[print(f|)]],
+        after    = [[print(f'|')]]
+    },
+    {
+        name     = "82 add closing single quote for capital python prefixed string",
+        filetype = "python",
+        key      = [[']],
+        before   = [[print(B|)]],
+        after    = [[print(B'|')]]
+    },
+    {
+        name     = "83 don't add closing single quote for random prefix string",
+        filetype = "python",
+        key      = [[']],
+        before   = [[print(s|)]],
+        after    = [[print(s'|)]]
+    },
+    {
+        name     = "84 don't add closing single quote for other filetype prefixed string",
+        filetype = "lua",
+        key      = [[']],
+        before   = [[print(f|)]],
+        after    = [[print(f'|)]]
+    },
+    {
+        name     = "85 allow brackets in prefixed python single quote string",
+        filetype = "python",
+        key      = [[{]],
+        before   = [[print(f'|')]],
+        after    = [[print(f'{|}')]]
+    },
+    {
+        name     = "86 move ' is working on python",
+        filetype = "python",
+        key      = [[']],
+        before   = [[('|') ]],
+        after    = [[(''|) ]]
+    },
 }
 
 local run_data = _G.Test_filter(data)
@@ -773,7 +821,6 @@ describe('autopairs ', function()
             if value.setup_func then
                 value.setup_func()
             end
-
         end,
     })
 end)
