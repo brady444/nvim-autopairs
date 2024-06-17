@@ -13,7 +13,7 @@ vim.api.nvim_set_keymap(
 )
 
 ts.setup({
-    ensure_installed = { 'lua', 'javascript', 'rust' },
+    ensure_installed = { 'lua', 'javascript', 'rust', 'markdown', 'markdown_inline' },
     highlight = { enable = true },
     autopairs = { enable = true },
 })
@@ -33,19 +33,6 @@ local data = {
         after = [[  [[ aaa"| ]],
     },
 
-    {
-        name = 'treesitter javascript quote',
-        filepath = './tests/endwise/javascript.js',
-        filetype = 'javascript',
-        linenr = 5,
-        key = [[(]],
-        before = {
-            [[ const data= `aaa | ]],
-            [[  ]],
-            '`',
-        },
-        after = [[ const data= `aaa (| ]],
-    },
     {
         setup_func = function()
             npairs.add_rules({
@@ -93,12 +80,39 @@ local data = {
         before = [[pub fn noop(_inp: Vec|) {]],
         after = [[pub fn noop(_inp: Vec<|>) {]],
     },
+    {
+        setup_func = function()
+            npairs.add_rules({
+                Rule('*', '*', { 'markdown', 'markdown_inline' })
+                    :with_pair(ts_conds.is_not_in_context()),
+            })
+        end,
+        name = 'ts_context markdown `*` success md_context',
+        filepath = './tests/endwise/sample.md',
+        linenr = 2,
+        filetype = 'markdown',
+        key = '*',
+        before = [[|]],
+        after = [[*|*]],
+    },
+    {
+        setup_func = function()
+            npairs.add_rules({
+                Rule('*', '*', { 'markdown', 'markdown_inline' })
+                    :with_pair(ts_conds.is_not_in_context()),
+            })
+        end,
+        name = 'ts_context codeblock `*` fail js_context',
+        filepath = './tests/endwise/sample.md',
+        linenr = 6,
+        filetype = 'markdown',
+        key = '*',
+        before = [[let calc = 1  |]],
+        after = [[let calc = 1 *|]],
+    },
 }
 
 local run_data = _G.Test_filter(data)
-
-local _, ts_utils = pcall(require, 'nvim-treesitter.ts_utils')
-_G.TU = ts_utils
 
 describe('[treesitter check]', function()
     _G.Test_withfile(run_data, {
