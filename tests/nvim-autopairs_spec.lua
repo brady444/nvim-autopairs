@@ -1,11 +1,11 @@
-local npairs = require('nvim-autopairs')
 local Rule = require('nvim-autopairs.rule')
 local cond = require('nvim-autopairs.conds')
+local npairs = require('nvim-autopairs')
 
 local log = require('nvim-autopairs._log')
 _G.log = log
 local utils = require('nvim-autopairs.utils')
-_G.npairs = npairs;
+_G.npairs = npairs
 
 --  make test-file FILE=tests/nvim-autopairs_spec.lua
 
@@ -845,16 +845,154 @@ local data = {
             "|```python"
         }
     },
+    {
+        name   = [[add " in a bash-like command substitution, but not in a bash file]],
+        key    = [["]],
+        before = [["$(|)"]],
+        after  = [["$("|)"]],
+    },
+    {
+        name   = [[add " in a bash-like variable expansion, but not in a bash file]],
+        key    = [["]],
+        before = [["${|}"]],
+        after  = [["${"|}"]],
+    },
+    {
+        name   = [[add " in a bash command substitution]],
+        key    = [["]],
+        before = [["$(|)"]],
+        after  = [["$("|")"]],
+        filetype = "bash"
+    },
+    {
+        name   = [[add " in a bash command substitution, after a pair "]],
+        key    = [["]],
+        before = [["$("$cmd" |)"]],
+        after  = [["$("$cmd" "|")"]],
+        filetype = "bash"
+    },
+    {
+        name   = [[add " in a bash command substitution, after a open "]],
+        key    = [["]],
+        before = [["$("|)"]],
+        after  = [["$(""|)"]],
+        filetype = "bash"
+    },
+    {
+        name   = [[add " after a bash command substitution]],
+        key    = [["]],
+        before = [["$("$var")" | ]],
+        after  = [["$("$var")" "|"]],
+        filetype = "bash"
+    },
+    {
+        name   = [[add " in a variable command substitution]],
+        key    = [["]],
+        before = [["${|}"]],
+        after  = [["${"|"}"]],
+        filetype = "bash"
+    },
+    {
+        name   = [[add " in a bash variable expansion, after a pair "]],
+        key    = [["]],
+        before = [["${"$cmd" |}"]],
+        after  = [["${"$cmd" "|"}"]],
+        filetype = "bash"
+    },
+    {
+        name   = [[add " in a bash variable expansion, after a open "]],
+        key    = [["]],
+        before = [["${"|}"]],
+        after  = [["${""|}"]],
+        filetype = "bash"
+    },
+    {
+        name   = [[add " in a bash variable expansion, within array.]],
+        key    = [["]],
+        before = [==["${arr[|]}"]==],
+        after  = [==["${arr["|"]}"]==],
+        filetype = "bash"
+    },
+    {
+        name   = [[add " after a bash variable expansion]],
+        key    = [["]],
+        before = [["${"$var"}" | ]],
+        after  = [["${"$var"}" "|"]],
+        filetype = "bash"
+    },
+    {
+        name   = [[add " in a bash command substitution]],
+        key    = [["]],
+        before = [["$(|)"]],
+        after  = [["$("|")"]],
+        filetype = "sh"
+    },
+    {
+        name   = [[add " in a bash command substitution, after a pair "]],
+        key    = [["]],
+        before = [["$("$cmd" |)"]],
+        after  = [["$("$cmd" "|")"]],
+        filetype = "sh"
+    },
+    {
+        name   = [[add " in a bash command substitution, after a open "]],
+        key    = [["]],
+        before = [["$("|)"]],
+        after  = [["$(""|)"]],
+        filetype = "sh"
+    },
+    {
+        name   = [[add " after a bash command substitution]],
+        key    = [["]],
+        before = [["$("$var")" | ]],
+        after  = [["$("$var")" "|"]],
+        filetype = "sh"
+    },
+    {
+        name   = [[add " in a variable command substitution]],
+        key    = [["]],
+        before = [["${|}"]],
+        after  = [["${"|"}"]],
+        filetype = "sh"
+    },
+    {
+        name   = [[add " in a bash variable expansion, after a pair "]],
+        key    = [["]],
+        before = [["${"$cmd" |}"]],
+        after  = [["${"$cmd" "|"}"]],
+        filetype = "sh"
+    },
+    {
+        name   = [[add " in a bash variable expansion, after a open "]],
+        key    = [["]],
+        before = [["${"|}"]],
+        after  = [["${""|}"]],
+        filetype = "sh"
+    },
+    {
+        name   = [[add " after a bash variable expansion]],
+        key    = [["]],
+        before = [["${"$var"}" | ]],
+        after  = [["${"$var"}" "|"]],
+        filetype = "sh"
+    },
+    {
+        name   = [[add " in a bash variable expansion, within array.]],
+        key    = [["]],
+        before = [==["${arr[|]}"]==],
+        after  = [==["${arr["|"]}"]==],
+        filetype = "sh"
+    },
 }
 
 local run_data = _G.Test_filter(data)
 
-describe("autopairs ", function()
+describe('autopairs ', function()
     _G.Test_withfile(run_data, {
         cursor_add = 0,
         before_each = function(value)
             npairs.setup()
-            vim.opt.indentexpr = ""
+            vim.opt.indentexpr = ''
             if value.setup_func then
                 value.setup_func()
             end
